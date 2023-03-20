@@ -1,0 +1,39 @@
+
+.App {
+  max-width: 1280px;
+width: 100%;
+  margin:0 auto;
+  .createNoteContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap:16px;
+    padding: 16px;
+  }
+  .notesContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    .noteConteainer{
+      padding: 32px;
+      margin: 16px;
+      width: 100%;
+      max-width: 300px;
+      min-height: 200px;
+      background-color: aliceblue;
+      line-height: 35px;
+      .editSpan{
+        cursor: pointer;
+        &:hover{
+          background-color: aqua;
+        }
+      }
+      button{
+        margin:8px
+      }
+    }
+  }
+}
+
