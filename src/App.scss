@@ -11,16 +11,14 @@ width: 100%;
     padding: 16px;
   }
   .notesContainer{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr ;
+    gap: 32px;
 
     .noteConteainer{
       padding: 32px;
       margin: 16px;
       width: 100%;
-      max-width: 300px;
       min-height: 200px;
       background-color: aliceblue;
       line-height: 35px;
