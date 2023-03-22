@@ -16,14 +16,17 @@
       background-color: yellow;
       color: green;
     }
-    &:disabled{
+
+    &:disabled {
       background-color: #4c5664;
     }
   }
-  textarea{
+
+  textarea {
     font-size: 16px;
   }
-  input{
+
+  input {
     font-size: 16px;
   }
 
@@ -46,11 +49,11 @@
 
     display: flex;
     flex-wrap: wrap;
-    gap:32px;
+    gap: 32px;
     justify-content: flex-start;
 
     .noteConteainer {
-      flex:0 0 calc(25% - 32px);
+      flex: 0 0 calc(25% - 32px);
       padding: 32px;
 
 
