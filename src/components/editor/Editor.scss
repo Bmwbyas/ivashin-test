@@ -1,0 +1,21 @@
+
+div {
+  .textReader {
+    padding-left: 8px;
+    min-height: 300px;
+    width: 100%;
+    border: 1px solid;
+    text-align: left;
+    span{
+      background-color: aqua;
+    }
+  }
+
+  .editSpan {
+    cursor: pointer;
+
+    &:hover {
+      background-color: aqua;
+    }
+  }
+}
