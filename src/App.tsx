@@ -1,45 +1,48 @@
-import React, {ChangeEvent, useCallback, useReducer} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useReducer} from 'react';
 import './App.scss';
 import {Editor} from "./components/editor/Editor";
 import {initialState, reducer} from "./store/store";
 import CreateComponent from "./components/createComponent/CreateComponent";
+import {getLocalStorage, saveInLocalStorage} from "./localStorage/localstorage";
 
 function App() {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    useEffect(() => {
+        const localData = getLocalStorage()
+        if (localData) {
+            dispatch({type: "SET-STATE", payload: {state: localData}})
+        }
+    }, [])
+
+    useEffect(() => {
+        saveInLocalStorage(state)
+    }, [state])
+
     let filtredNotes = state.notes.filter(n => n.hash.join(' ').includes(state.search))
 
-
     const onChangeSearchHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch({type: 'SET-SEARCH-TEXT', payload: e.currentTarget.value})
+        dispatch({type: 'SET-SEARCH-TEXT', payload: {text: e.currentTarget.value}})
     }
-    const createPostHandler = useCallback(() => {
-        dispatch({type: 'CREATE'})
-        dispatch({type: 'SET-CREATE-TEXT', payload: ''})
-    },[dispatch])
+    const createPostHandler = useCallback((text: string) => {
+        dispatch({type: 'CREATE', payload: {text}})
 
-    const onChangeCreate =useCallback( (e: ChangeEvent<HTMLTextAreaElement>) => {
-        dispatch({type: 'SET-CREATE-TEXT', payload: e.currentTarget.value})
-    },[dispatch])
+    }, [dispatch])
 
-    const onChangeCreateHash=useCallback( (e: ChangeEvent<HTMLTextAreaElement>) => {
-        dispatch({type: 'SET-CREATE-HASH', payload: e.currentTarget.value})
-    },[dispatch])
 
     return (
         <div className={'App'}>
             <div className={'createNoteContainer'}>
 
                 <CreateComponent
-                    value={state.createText}
-                    onChange={onChangeCreate}
                     onClick={createPostHandler}
                     buttonName={'Cоздать заметку'}
                 />
                 <div>
                     <div>Поиск</div>
-                    <input value={state.search} placeholder={'Поиск по тегу'} onChange={onChangeSearchHandler}
+                    <input className={'inputSearch'} value={state.search} placeholder={'Поиск по тегу'}
+                           onChange={onChangeSearchHandler}
                            type={"text"}/>
                 </div>
             </div>
@@ -48,16 +51,15 @@ function App() {
                 {filtredNotes.map(n => {
 
                     const removeNote = () => {
-                        dispatch({type: 'DELETE', payload: n.id})
+                        dispatch({type: 'DELETE', payload: {id: n.id}})
                     }
                     const toggleEditMode = () => {
 
-                        dispatch({type: 'TOGGLE-EDIT-MODE', payload: n.id})
+                        dispatch({type: 'TOGGLE-EDIT-MODE', payload: {id: n.id}})
                     }
 
-                    const addTag = () => {
-                        dispatch({type: 'ADD-HASH', payload: n.id})
-                        dispatch({type:'SET-CREATE-HASH', payload:''})
+                    const addTag = (text: string) => {
+                        dispatch({type: 'ADD-HASH', payload: {text, id: n.id}})
                     }
 
                     return <div key={n.id} className={'noteConteainer'}>
@@ -76,8 +78,6 @@ function App() {
                             })
                             }
                             <CreateComponent
-                                value={state.hashText}
-                                onChange={onChangeCreateHash}
                                 onClick={addTag}
                                 buttonName={'Cоздать Hash'}
                             />

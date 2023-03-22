@@ -1,35 +1,64 @@
 
 .App {
-  max-width: 1280px;
-  width: 100%;
+
+  width: 80%;
   margin: 0 auto;
+
+  button {
+    background-color: black;
+    color: white;
+    margin: 8px;
+    padding: 8px;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: yellow;
+      color: green;
+    }
+    &:disabled{
+      background-color: #4c5664;
+    }
+  }
+  textarea{
+    font-size: 16px;
+  }
+  input{
+    font-size: 16px;
+  }
 
   .createNoteContainer {
     width: 100%;
     display: flex;
-    justify-content: space-around;
-    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
     padding: 16px;
+
+    .inputSearch {
+      margin-top: 8px;
+      padding: 8px;
+    }
   }
 
   .notesContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 32px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap:32px;
+    justify-content: flex-start;
 
     .noteConteainer {
+      flex:0 0 calc(25% - 32px);
       padding: 32px;
-      margin: 16px;
-      width: 100%;
-      min-height: 200px;
-      background-color: aliceblue;
+
+
+      min-height: 300px;
+      background-color: #e9fce5;
       line-height: 35px;
+      border: 2px solid black;
+      border-radius: 16px;
 
-
-
-      button {
-        margin: 8px
-      }
     }
   }
 }

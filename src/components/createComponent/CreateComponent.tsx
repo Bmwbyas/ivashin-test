@@ -1,19 +1,21 @@
-import React, {ChangeEvent, memo} from 'react';
+import React, {memo, useState} from 'react';
 import './CreateComponent.scss'
 
-type CreateComponentType={
-    value:string
-    onChange:(e: ChangeEvent<HTMLTextAreaElement>)=>void
-    onClick:()=>void
-    buttonName:string
+type CreateComponentType = {
+    onClick: (value: string) => void
+    buttonName: string
 }
 
-const CreateComponent:React.FC<CreateComponentType> = memo(({value,onClick,onChange,buttonName}) => {
-
+const CreateComponent: React.FC<CreateComponentType> = memo(({onClick, buttonName}) => {
+    const [value, setValue] = useState('')
+    const onClickHandler = () => {
+        onClick(value)
+        setValue('')
+    }
     return (
-        <div>
-            <textarea value={value} onChange={onChange}/>
-            <button onClick={onClick}>{buttonName}</button>
+        <div className={'createContainer'}>
+            <textarea value={value} onChange={(e) => setValue(e.currentTarget.value)}/>
+            <button onClick={onClickHandler} disabled={value.trim() === ''}>{buttonName}</button>
         </div>
     );
 });

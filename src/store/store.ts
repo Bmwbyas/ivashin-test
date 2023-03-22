@@ -1,12 +1,11 @@
-import {ActionsType, Notes} from "../types/types";
+import {ActionsType, InitialStateType, Note} from "../types/types";
 import {v1} from "uuid";
 import {divideHashText} from "../assets/function/divideHashText";
 import {addHashText} from "../assets/function/addHashText";
 
-type InitialStateType = typeof initialState
+
 export const initialState = {
-    notes: [] as Notes[],
-    createText: '',
+    notes: [] as Note[],
     hashText: '',
     search: ''
 };
@@ -14,10 +13,10 @@ export const initialState = {
 export function reducer(state: InitialStateType = initialState, action: ActionsType) {
     switch (action.type) {
         case 'CREATE':
-            const data = divideHashText(state.createText)
-            const note: Notes = {
+            const data = divideHashText(action.payload.text)
+            const note: Note = {
                 id: v1(),
-                inputText: state.createText,
+                inputText: action.payload.text,
                 textWithHash: data.textWithHash.join(' '),
                 text: data.text.join(' ').trim(),
                 hash: data.hashs,
@@ -26,21 +25,15 @@ export function reducer(state: InitialStateType = initialState, action: ActionsT
             return {...state, notes: [...state.notes, note]};
 
         case 'DELETE':
-            return {...state, notes: state.notes.filter(n => n.id !== action.payload)};
-
-        case 'SET-CREATE-TEXT':
-            return {...state, createText: action.payload};
-
-        case 'SET-CREATE-HASH':
-            return {...state, hashText: action.payload};
+            return {...state, notes: state.notes.filter(n => n.id !== action.payload.id)};
 
         case 'SET-SEARCH-TEXT':
-            return {...state, search: action.payload};
+            return {...state, search: action.payload.text};
 
         case 'TOGGLE-EDIT-MODE':
             return {
                 ...state,
-                notes: state.notes.map(n => n.id === action.payload
+                notes: state.notes.map(n => n.id === action.payload.id
                     ? {...n, editMode: !n.editMode}
                     : n)
             };
@@ -69,7 +62,7 @@ export function reducer(state: InitialStateType = initialState, action: ActionsT
             if (!note) {
                 return state
             }
-            const currentInputText = note.inputText.split(' ').filter(t => t!==action.payload.hash).join(' ')
+            const currentInputText = note.inputText.split(' ').filter(t => t !== action.payload.hash).join(' ')
             const data = divideHashText(currentInputText)
 
             return {
@@ -87,14 +80,18 @@ export function reducer(state: InitialStateType = initialState, action: ActionsT
             }
         }
         case "ADD-HASH": {
-            const note = state.notes.find(n => n.id === action.payload)
+            const note = state.notes.find(n => n.id === action.payload.id)
             if (!note) {
                 return state
             }
-            const newNote = addHashText(note, state.hashText)
+            const newNote = addHashText(note, action.payload.text)
 
-            return {...state, notes: state.notes.map(n => n.id === action.payload ? newNote : n)}
+            return {...state, notes: state.notes.map(n => n.id === action.payload.id ? newNote : n)}
         }
+        case "SET-STATE":
+            return {...action.payload.state}
+
+
         default:
             return state
     }

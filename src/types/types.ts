@@ -1,6 +1,8 @@
-export type Notes = {
+import {initialState} from "../store/store";
+
+export type Note = {
     id: string,
-    inputText:string
+    inputText: string
     textWithHash: string
     text: string,
     hash: string []
@@ -8,22 +10,16 @@ export type Notes = {
 }
 type CreateType = {
     type: "CREATE",
+    payload: { text: string }
 }
 type RemoveType = {
     type: "DELETE",
-    payload: string
+    payload: { id: string }
 }
-type SetCreateText = {
-    type: 'SET-CREATE-TEXT',
-    payload: string
-}
-type SetCreateHash = {
-    type: 'SET-CREATE-HASH',
-    payload: string
-}
+
 type ToggleEditMode = {
     type: 'TOGGLE-EDIT-MODE',
-    payload: string
+    payload: { id: string }
 }
 type UpdateNote = {
     type: 'UPDATE-NOTE',
@@ -34,11 +30,14 @@ type UpdateNote = {
 }
 type SetSearchText = {
     type: 'SET-SEARCH-TEXT',
-    payload: string
+    payload: { text: string }
 }
 type AddHashtag = {
     type: 'ADD-HASH',
-    payload: string
+    payload: {
+        id: string
+        text: string
+    }
 }
 type RemoveHashtag = {
     type: 'REMOVE-HASH',
@@ -47,14 +46,20 @@ type RemoveHashtag = {
         hash: string
     }
 }
+type SetState = {
+    type: 'SET-STATE',
+    payload: {
+        state: InitialStateType
+    }
+}
 export type ActionsType =
     | CreateType
     | RemoveType
-    | SetCreateText
     | ToggleEditMode
-    | SetCreateHash
     | UpdateNote
     | SetSearchText
     | AddHashtag
     | RemoveHashtag
+    | SetState
 
+export type InitialStateType = typeof initialState
